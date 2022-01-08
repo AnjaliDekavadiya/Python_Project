@@ -1,5 +1,4 @@
-from treelib import Node,Tree
-
+from treelib import Tree
 # Create class category
 class Category:
     code_c = 100
@@ -37,16 +36,17 @@ class Product:
     code_p = 300
 
     # create member of a product
-    def __init__(self, name, category, price):
+    def __init__(self, name, category, price,stock_at_location={}):
         self.name = name
         self.code = Product.code_p + 1
         Product.code_p += 1
         self.category = category.name
         self.price = price
         category.no_of_products += 1
+        self.stock_at_location=stock_at_location
 
     # diaplay member of a product
-    def Product_Diaplay(self):
+    def Product_Display(self):
         print("Product:", self.name, " ", "code:", self.code, " ", "category:", self.category, " ", "Price:",
               self.price)
 
@@ -85,7 +85,7 @@ def main():
     print("\n")
     print(("List of Products"))
     for x in pobj1:
-        x.Product_Diaplay()
+        x.Product_Display()
 
     tree=Tree()
     tree.create_node("Product Category",0)
@@ -103,14 +103,14 @@ def main():
     print("Product Sorted in ascending order")
     x = (sorted(pobj1, key=lambda x: x.price))
     for i in x:
-        i.Product_Diaplay()
+        i.Product_Display()
 
     # sort product in dedending order using its price
     print("\n")
     print("Product Sorted in Desending order")
     x = sorted(pobj1, key=lambda x: x.price, reverse=True)
     for i in x:
-        i.Product_Diaplay()
+        i.Product_Display()
 
     # search product using product code
     print("\n")
