@@ -1,4 +1,5 @@
 from treelib import Tree
+import pandas as pd
 # Create class category
 class Category:
     code_c = 100
@@ -40,7 +41,7 @@ class Product:
         self.name = name
         self.code = Product.code_p + 1
         Product.code_p += 1
-        self.category = category.name
+        self.category = category
         self.price = price
         category.no_of_products += 1
         self.stock_at_location=stock_at_location
@@ -58,6 +59,7 @@ def main():
     Mobile = Category('Mobile',Electronic)
     Car=Category('Car',Vehical)
     Iphone=Category('Iphone',Mobile)
+
     listOfCategory=[Electronic,Vehical,Mobile,Car,Iphone]
 
     # calling product object
@@ -80,13 +82,23 @@ def main():
     # diaplay category list
 
     print("List of category")
+    '''df=pd.DataFrame(t.__dict__ for t in listOfCategory)
+    df['code']=df['code'].apply(lambda listOfCategory:listOfCategory.name)
+    print(df)'''
     for x in listOfCategory:
         x.display_category_information()
+
+    #display product list
     print("\n")
     print(("List of Products"))
-    for x in pobj1:
-        x.Product_Display()
+    df=pd.DataFrame(t.__dict__ for t in pobj1)
+    df['category']=df['category'].apply(lambda pobj1:pobj1.name)
+    print(df)
 
+    '''for x in pobj1:
+        x.Product_Display()'''
+
+    #display tree
     tree=Tree()
     tree.create_node("Product Category",0)
     for i in listOfCategory:
@@ -98,29 +110,42 @@ def main():
     print("\n")
     tree.show()
 
+    pd.set_option('display.max_rows',500)
+    pd.set_option('display.max_columns',500)
+    pd.set_option('display.width',1000)
+
     # sort product in ascending order using its price
     print("\n")
     print("Product Sorted in ascending order")
-    x = (sorted(pobj1, key=lambda x: x.price))
-    for i in x:
-        i.Product_Display()
+    x = (sorted(pobj1, key=lambda r: r.price))
+    df = pd.DataFrame(t.__dict__ for t in x)
+    df['category'] = df['category'].apply(lambda x: x.name)
+    print(df)
+    '''for i in x:
+        i.Product_Display()'''
+
+
 
     # sort product in dedending order using its price
     print("\n")
     print("Product Sorted in Desending order")
-    x = sorted(pobj1, key=lambda x: x.price, reverse=True)
-    for i in x:
-        i.Product_Display()
+    x= (sorted(pobj1, key=lambda r: r.price, reverse=True))
+    df=pd.DataFrame(t.__dict__ for t in x)
+    df['category']=df['category'].apply(lambda x:x.name)
+    print(df)
+    '''for i in x1:
+        i.Product_Display()'''
 
     # search product using product code
     print("\n")
-    codenumber = int(input("Enter Product Code:"))
+    codenumber = int(float(input("Enter Product Code:")))
     y = [x for x in pobj1 if x.code == codenumber]
     for i in y:
-        i.Product_Diaplay()
+        i.Product_Display()
 
 if __name__ == '__main__':
     main()
+
 
 
 
