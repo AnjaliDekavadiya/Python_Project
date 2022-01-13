@@ -59,7 +59,10 @@ class Customer:
         print("Email:",self.email)
         print("Phone:",self.phone)
         print(f"Address: {self.street}, {self.city}, {self.state}, {self.country}")
-        print("Company",self.company)
+        if self.company=="":
+            pass
+        else:
+            print("Company:",self.company.name)
         print("Type:",self.type)
 
         '''emailre = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
@@ -74,7 +77,7 @@ class Order:
 
     #define member of order class
     def __init__(self,date,company,billing,shipping):
-        self.number=f"o-{Order.number}"
+        self.number=Order.number+1
         Order.number+=1
         self.date=self.check(date)
         self.comapny=company
@@ -133,16 +136,22 @@ class Order:
 class OrderLine:
 
     #define member of orderline class
-    def __init__(self,order,product,quantity):
+    def __init__(self,order,product,quantity,price=None):
         self.order=order
         self.product=product
         self.quantity=int(quantity)
-        self.price=product.price
-        self.subtotal=self.price*quantity
+        self.mrp=product.price
+        if price is None:
+            self.price = product.price
+        else:
+            self.price = price
+        self.subtotal=(self.price*self.quantity)
         self.order.order_lines.append(self)
+        self.order.totalamount()
 
     def display(self):
         print("Product:", self.product.name)
+        print("MRP:",self.mrp)
         print("Quantity:",self.quantity)
         print("Price:",self.price)
         print("Total:",self.subtotal)
@@ -162,33 +171,33 @@ def main():
 
     listofproduct=[mobile,car,book,pen,laptop]
 
-    Zara = Customer("Zara", "zara@gmail.com", "7854932810", "University", "Rajkot", "Gujarat", "India","", "company")
+    Suzuki = Customer("Suzuki", "suzuki@gmail.com", "7854932810", "University", "Rajkot", "Gujarat", "India","", "company")
     Puma = Customer("Puma", "puma@gmail.com", "8756210144", "Astron", "Rajkot", "Gujarat", "India","", "company")
     Classmate = Customer("Classmate", "classmate@gmail.com", "8887779990", "Kalawad", "Rajkot", "Gujarat", "India", "", "company")
-    john = Customer("John", "john@gmail.com", "9856472310", "Narhe", "Pune", "Maharashtra", "India","", "billing")
-    david = Customer("David", "david@gmail.com", "9856472310", "T-square", "Jamnagar", "Gujarat", "India","", "shipping")
-    max = Customer("Max", "max@gmail.com", "7598624825", "Kalyan", "Mumbai", "Maharashtra", "India","", "shipping")
-    ananya = Customer("Ananya", "ananya@gmail.com", "8964712500", "Cochin", "Ernakulam", "Kerala", "India","", "billing")
-    kruti = Customer("Kruti", "kruti@gmail.com", "8520069442", "Ace Ln.", "Dallas", "Texas", "USA","", "billing")
-    sammy = Customer("Sammy", "sammy@gmail.com", "9510022336", "Westchase", "Tampa", "Florida", "USA", "", "shipping")
+    Kinjal= Customer("Kinjal", "kinjal@gmail.com", "9856472310", "Narhe", "Pune", "Maharashtra", "India","", "billing")
+    Mital= Customer("Mital", "mital@gmail.com", "9856472310", "T-square", "Jamnagar", "Gujarat", "India","", "shipping")
+    Darshan= Customer("Darshan", "darshan@gmail.com", "7598624825", "Kalyan", "Mumbai", "Maharashtra", "India","", "shipping")
+    Sheetal= Customer("Sheetal", "sheetal@gmail.com", "8964712500", "Cochin", "Ernakulam", "Kerala", "India","", "billing")
+    Dvijesh= Customer("Dvijesh", "dvijesh@gmail.com", "8520069442", "Ace Ln.", "Dallas", "Texas", "USA","", "billing")
+    Hardik= Customer("Hardik", "hardik@gmail.com", "9510022336", "Westchase", "Tampa", "Florida", "USA", "", "shipping")
 
-    order1 = Order('2022-5-12', Puma, john, david)
+    order1 = Order('2022-5-12', Puma, Kinjal, Hardik)
     order1_line1 = OrderLine(order1, mobile, 3)
     order1_line2 = OrderLine(order1, book, 1)
     order1_line3 = OrderLine(order1, pen, 1)
 
-    order2 = Order('2022-3-4', Zara, ananya, sammy)
+    order2 = Order('2022-3-4', Suzuki, Sheetal,Mital)
     order2_line1 = OrderLine(order2, laptop, 4)
     order2_line2 = OrderLine(order2, car, 1)
 
-    order3 = Order('2023-5-15', Classmate, kruti, david)
+    order3 = Order('2023-5-15', Classmate, Dvijesh, Darshan)
     order3_line1 = OrderLine(order3, pen, 10)
 
-    order4 = Order('2022-1-15', Puma, ananya, max)
+    order4 = Order('2022-1-15', Puma, Kinjal, Mital)
     order4_line1 = OrderLine(order4, mobile, 2)
     order4_line2 = OrderLine(order4, car, 1)
 
-    listofcustomer=[Zara,Puma,Classmate,john,david,max,ananya,kruti,sammy]
+    listofcustomer=[Suzuki,Puma,Classmate,Kinjal,Mital,Darshan,Sheetal,Dvijesh,Hardik]
     listoforder=[order1,order2,order3,order4]
     sorted_list = list(sorted(listoforder, key=lambda item: item.date))
 
@@ -199,7 +208,7 @@ def main():
     count = 1
     for i in listofcustomer:
         if i.name and i.email and i.phone and i.street and i.city and i.state and i.country and i.type:
-            print("\n")
+            print()
             print("---------------")
             print(f"| Serial No. {count} |")
             print("---------------")
@@ -218,7 +227,7 @@ def main():
 
     count=1
     for i in sorted_list:
-        print("\n")
+        print()
         print("----------------")
         print(f"|Order No. {count} |")
         print("-------------")
@@ -227,20 +236,23 @@ def main():
         print("\n\n")
 
     #display all orders of a product
+    search_product=input("Enter product name:")
+    flag=0
     print("--------------------------------------")
     print("| List of orders of specific product |")
     print("--------------------------------------")
-
-
     for i in listofproduct:
-        print("\n")
-        print(f"Orders of {i.name}")
-        print("------------------------")
-        for j in listoforder:
-            for k in j.order_lines:
-                if k.product==i:
-                    print()
-                    k.display()
+        if i.name==search_product:
+            for j in listoforder:
+                for k in j.order_lines:
+                    if k.product==i:
+                        print()
+                        print("Order number:",j.number)
+                        k.display()
+                        flag=1
+    if flag==0:
+        print()
+        print("No such product order!")
 
     #filter current month orders
     print("\n\n")
@@ -262,7 +274,7 @@ def main():
 
     #search order from order number
     print("\n\n")
-    search_order = input("Enter Order Number: ")
+    search_order = int(input("Enter Order Number: "))
     flag = 0
     for i in listoforder:
         if i.number == search_order:
@@ -272,9 +284,29 @@ def main():
         print("No such orders!")
 
 
+    #search using binary search
+    def search(lst, target):
+        temp1 = 0
+        min = 0
+        max = len(lst) - 1
+        avg = (min + max) // 2
+        while (min <= max):
+            if (str(lst[avg].number) == str(target)):
+                lst[avg].display()
+                temp1 = 1
+                break
+            elif (float(lst[avg].number) < float(target)):
+                return search(lst[avg + 1], target)
+            else:
+                return search(lst[:avg], target)
+
+        if temp1 == 0:
+            print("not available order number ")
+
+    sorted_list=list(sorted(listoforder,key=lambda item1:item1.number))
+    order_number=int(input("Enter order number:"))
+    search(sorted_list,order_number)
+
+
 if __name__=='__main__':
     main()
-
-
-
-
