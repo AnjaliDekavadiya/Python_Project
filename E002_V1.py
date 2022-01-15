@@ -131,6 +131,23 @@ class Order:
 
         ''' for i in self.order_lines:
                     print(i.order.number)'''
+    @staticmethod
+    def binary_search(list_o,low,high,ord_num):
+        if high>=low:
+            mid=(high+low)//2
+            if str(list_o[mid].number)==ord_num:
+                list_o[mid].display()
+            elif str(list_o[mid].number) > ord_num:
+                return Order.binary_search(list_o,low,mid-1,ord_num)
+            else:
+                return Order.binary_search(list_o,mid+1,high,ord_num)
+
+        else:
+            print("no such orders!")
+
+
+
+
 
 #create orderline class
 class OrderLine:
@@ -272,7 +289,7 @@ def main():
     else:
         print("Invalid input")
 
-    #search order from order number
+    '''#search order from order number
     print("\n\n")
     search_order = int(input("Enter Order Number: "))
     flag = 0
@@ -281,10 +298,10 @@ def main():
             i.display()
             flag = 1
     if flag == 0:
-        print("No such orders!")
+        print("No such orders!")'''
 
 
-    #search using binary search
+    '''#search using binary search
     def search(lst, target):
         temp1 = 0
         min = 0
@@ -303,9 +320,16 @@ def main():
         if temp1 == 0:
             print("not available order number ")
 
-    sorted_list=list(sorted(listoforder,key=lambda item1:item1.number))
+    sorted_list=list(sorted(listoforder,key=lambda i:i.number))
     order_number=int(input("Enter order number:"))
-    search(sorted_list,order_number)
+    search(sorted_list,order_number)'''
+
+    #search oreder using binary search
+    sorted_list2=list(sorted(listoforder,key=lambda item:item.number))
+    search_order=input("Enter order number:")
+    high=len(sorted_list2)-1
+    low=0
+    Order.binary_search(sorted_list2,low,high,search_order)
 
 
 if __name__=='__main__':
