@@ -48,7 +48,7 @@ class Product:
 
     # diaplay member of a product
     def Product_Display(self):
-        print("Product:", self.name, " ", "code:", self.code, " ", "category:", self.category, " ", "Price:",
+        print("Product:", self.name, " ", "code:", self.code, " ", "category:", self.category.name, " ", "Price:",
               self.price)
 
 def main():

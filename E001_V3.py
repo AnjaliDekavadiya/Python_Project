@@ -1,4 +1,4 @@
-import E001_V2
+import os
 from E001_V2 import Product,Category
 
 class Location:
@@ -28,19 +28,27 @@ class Movement:
                     self.product.stock_at_location.update({self.to_location: qun1})
                 else:
                     self.product.stock_at_location.update({self.to_location: self.quantity})
-                self.display = f'product quantity:{self.quantity} from {self.from_location.name} to {self.to_location.name}'
+                self.display = f'product quantity:{self.quantity}  {self.product.name} from {self.from_location.name} to {self.to_location.name}'
             else:
-                self.display=f" quantity no:{self.quantity}) of {self.product.name} not available {self.from_location.name}"
+                #self.display=f" quantity no:{self.quantity}) of {self.product.name} not available {self.from_location.name}"
+                print(f"\nMovement Failed --> {self.quantity} {self.product.name} does not exist in {self.from_location.name}")
         except Exception:
-            self.display="no loaction for that product"
+            #self.display="no loaction for that product"
+            print(f"\nMovement Failed --> No {self.product.name} at {self.from_location.name}")
 
     @staticmethod
     def movement_by_product(product):
         flag=0
+        save_path='C:/Users/anujp/Desktop/ftp/'
         for item in listofmovement:
-            if item.product.name==product.name:
+            Movement.name=item.to_location.name
+            completename=os.path.join(save_path,Movement.name+".txt")
+            if item.product.name==product.name and item.display!='':
                 flag=1
                 print(item.display)
+                file=open(completename,"a")
+                file.writelines(item.display)
+                file.write("\n")
         if flag==0:
             print("No movement yet..")
 
@@ -48,8 +56,8 @@ class Movement:
 if __name__ == "__main__":
     rajkot=Location("Rajkot")
     jamnagar=Location("Jamnagar")
-    ahemdabad=Location("ahemdabad")
-    surat=Location("surat")
+    ahemdabad=Location("Ahemdabad")
+    surat=Location("Surat")
 
     listoflocation=[rajkot,jamnagar,ahemdabad,surat]
     for i in listoflocation:
@@ -72,10 +80,10 @@ if __name__ == "__main__":
         print()
 
 
-    movement1=Movement(rajkot,jamnagar,mobile,30)
-    movement2 = Movement(rajkot, ahemdabad, tv, 10)
-    movement3 = Movement(ahemdabad, jamnagar, laptop, 5)
-    movement4 = Movement(jamnagar, surat, tablet, 20)
+    movement1=Movement(rajkot,jamnagar,mobile,20)
+    movement2 = Movement(ahemdabad, surat, tv, 10)
+    movement3 = Movement(jamnagar, rajkot, laptop, 5)
+    movement4 = Movement(rajkot, ahemdabad, tablet, 20)
     movement5 = Movement(surat, ahemdabad, watch, 10)
 
     listofmovement=[movement1,movement2,movement3,movement4,movement5]
@@ -97,3 +105,4 @@ if __name__ == "__main__":
         for p in listofproduct:
             if i in p.stock_at_location:
                 print(f'{p.name}-{p.stock_at_location[i]}')
+        print()

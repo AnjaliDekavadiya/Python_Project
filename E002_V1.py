@@ -93,7 +93,7 @@ class Order:
     #date validation
     def check(self,date1):
         try:
-            date_obj=datetime.strptime(date1,'%Y-%m-%d')
+            date_obj=datetime.strptime(date1,'%d %b %Y')
             if date_obj.date()<date.today():
                 print("Past date is not valid")
             else:
@@ -198,19 +198,19 @@ def main():
     Dvijesh= Customer("Dvijesh", "dvijesh@gmail.com", "8520069442", "Ace Ln.", "Dallas", "Texas", "USA","", "billing")
     Hardik= Customer("Hardik", "hardik@gmail.com", "9510022336", "Westchase", "Tampa", "Florida", "USA", "", "shipping")
 
-    order1 = Order('2022-5-12', Puma, Kinjal, Hardik)
+    order1 = Order('12 jan 2023', Puma, Kinjal, Hardik)
     order1_line1 = OrderLine(order1, mobile, 3)
     order1_line2 = OrderLine(order1, book, 1)
     order1_line3 = OrderLine(order1, pen, 1)
 
-    order2 = Order('2022-3-4', Suzuki, Sheetal,Mital)
+    order2 = Order('12 jan 2023', Suzuki, Sheetal,Mital)
     order2_line1 = OrderLine(order2, laptop, 4)
     order2_line2 = OrderLine(order2, car, 1)
 
-    order3 = Order('2023-5-15', Classmate, Dvijesh, Darshan)
+    order3 = Order('12 jan 2023', Classmate, Dvijesh, Darshan)
     order3_line1 = OrderLine(order3, pen, 10)
 
-    order4 = Order('2022-1-15', Puma, Kinjal, Mital)
+    order4 = Order('12 jan 2023', Puma, Kinjal, Mital)
     order4_line1 = OrderLine(order4, mobile, 2)
     order4_line2 = OrderLine(order4, car, 1)
 
