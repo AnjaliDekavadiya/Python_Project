@@ -6,6 +6,8 @@ class PropertyTag(models.Model):
     _description = "Property Tag"
 
     name = fields.Char(required=True)
+    _order = "name"
+    color = fields.Integer()
 
     @api.constrains('name')
     def check_name(self):

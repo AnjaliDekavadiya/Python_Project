@@ -1,5 +1,5 @@
 from odoo import fields, models,api
-import datetime
+from odoo.exceptions import ValidationError
 
 
 class TestModel(models.Model):
@@ -13,14 +13,20 @@ class TestModel(models.Model):
     date_deadline = fields.Date(string="Deadline", compute="_compute_date", inverse="_inverse_date")
     property_id = fields.Many2one('test.model', required=True)
     create_date = fields.Datetime(default=fields.Datetime.now())
+    _order = "price desc"
+
+    _sql_constraints=[('check_price','CHECK(price > 0)','Offer price must be positive.')]
 
     def action_accept(self):
-        self.status = 'accepted'
         self.property_id.selling_price = self.price
-        self.property_id.buyer_id = self.partner_id
+        if self.property_id.selling_price != 0:
+            self.status = 'accepted'
+            self.property_id.buyer_id = self.partner_id
+            self.property_id.state='offer_accepted'
 
     def action_reject(self):
         self.status = 'refused'
+        self.property_id.selling_price=0
 
 
     @api.depends("validity")

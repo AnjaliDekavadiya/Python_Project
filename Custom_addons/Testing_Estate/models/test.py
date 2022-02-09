@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -37,10 +37,14 @@ class TestModel(models.Model):
     offer_ids = fields.One2many("property.offer", "property_id", string="Offers")
     total_area = fields.Float(compute="_compute_total", string="Total Area (sqm)")
     best_price = fields.Integer(compute="_compute_price", string="Best Offer")
+    _order = "id desc"
 
     _sql_constraints = [
         ('check_expected_price', 'CHECK(expected_price > 0)',
-         'The percentage of an analytic distribution should be between 0 and 100.')
+         'The expected price of a property should be greater than 0.'),
+        ('check_selling_price', 'CHECK(selling_price > 0)',
+         'The selling price of a property should be positive.')
+
     ]
 
     @api.depends('living_area', 'garden_area')
@@ -66,6 +70,15 @@ class TestModel(models.Model):
     def action_sold(self):
         self.state = 'sold'
 
+    def action_new(self):
+        self.state='new'
+
+    def action_received(self):
+        self.state='offer_received'
+
+    def action_accepted(self):
+        self.state='offer_accepted'
+
     def action_cancel(self):
         self.state = 'cancelled'
 
@@ -74,13 +87,23 @@ class TestModel(models.Model):
         for record in self:
             name = self.env['test.model'].search([('name', "=", record.name), ('id', '!=', record.id)])
             if name:
-                raise ValidationError(("Name  %s Already exists" % record.name))
+                raise ValidationError("Name  %s Already exists" % record.name)
 
     @api.constrains('name', 'description')
     def _check_description(self):
         for record in self:
             if record.name == record.description:
                 raise ValidationError("Fields name and description must be different")
+
+    @api.constrains('selling_price', 'expected_price')
+    def _check_selling_price(self):
+        for rec in self:
+            if rec.selling_price != 0:
+                value = 0.9 * rec.expected_price
+                if rec.selling_price < value:
+                    rec.selling_price = 0
+                    raise ValidationError("The selling price should not be less than 90% of expected price.")
+
 
 
 

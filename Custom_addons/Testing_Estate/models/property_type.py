@@ -6,6 +6,9 @@ class PropertyType(models.Model):
     _description = "Property Type"
 
     name = fields.Char(required=True)
+    property_ids = fields.One2many('test.model','property_type_id',string='Property')
+    _order = "name"
+    sequence = fields.Integer('Sequence', default=1)
 
     @api.constrains('name')
     def check_name(self):
