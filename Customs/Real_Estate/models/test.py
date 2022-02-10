@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import api, fields, models,_
 from odoo.exceptions import ValidationError
 
 
@@ -7,6 +7,7 @@ class TestModel(models.Model):
     _description = "Test Model"
 
     name = fields.Char(required=True)
+    reference=fields.Char(string='Reference',required=True, copy=False, readonly=True,default=lambda self:_('New'))
     last_seen = fields.Datetime("Last Seen", default=lambda self: fields.Datetime.now())
     description=fields.Text()
     postcode=fields.Char()
@@ -38,6 +39,7 @@ class TestModel(models.Model):
     total_area = fields.Float(compute="_compute_total", string="Total Area (sqm)")
     best_price = fields.Integer(compute="_compute_price", string="Best Offer")
     _order = "id desc"
+
 
     _sql_constraints = [
         ('check_expected_price', 'CHECK(expected_price > 0)',
@@ -110,6 +112,8 @@ class TestModel(models.Model):
     def create(self, vals):
         if not vals.get('description'):
             vals['description'] = 'New Property'
+        if vals.get('reference', _('New')) == _('New'):
+            vals['reference'] = self.env['ir.sequence'].next_by_code('real.estate') or _('New')
         res = super(TestModel, self).create(vals)
         return res
 
@@ -127,6 +131,16 @@ class TestModel(models.Model):
         elif self.state == 'new':
             self.state = 'offer_received'
         return True
+
+    def refuse_offer(self, price):
+        print("hello", self.id.offer_ids)
+        # current = self.env['estate.property.offer'].browse(self._context.get('active_id')).offer_ids
+        for rec in self.id.offer_ids:
+            if rec.price == price:
+                pass
+            rec.action_reject()
+        return True
+
 
 
 

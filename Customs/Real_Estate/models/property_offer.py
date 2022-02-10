@@ -14,16 +14,11 @@ class PropertyOffer(models.Model):
     property_id = fields.Many2one('test.model', required=True)
     create_date = fields.Datetime(default=fields.Datetime.now())
     _order = "price desc"
-    #property_type_id=fields.Many2one("property_id.property_type_id", store='True')
+    property_type_id = fields.Many2one(related="property_id.property_type_id", store=True)
 
     _sql_constraints=[('check_price','CHECK(price > 0)','Offer price must be positive.')]
 
-    def action_accept(self):
-        self.property_id.selling_price = self.price
-        if self.property_id.selling_price != 0:
-            self.status = 'accepted'
-            self.property_id.buyer_id = self.partner_id
-            self.property_id.state='offer_accepted'
+
 
     def action_reject(self):
         self.status = 'refused'
@@ -44,6 +39,15 @@ class PropertyOffer(models.Model):
         if vals.get('price'):
             self.env['test.model'].browse(vals['property_id']).check_offer(vals.get('price'))
         return super(PropertyOffer, self).create(vals)
+
+    def action_accept(self):
+        refuse = self.env['test.model'].browse(self.property_id)
+        refuse.refuse_offer(self.price)
+        self.property_id.selling_price = self.price
+        if self.property_id.selling_price != 0:
+            self.status = 'accepted'
+            self.property_id.buyer_id = self.partner_id
+            self.property_id.state = 'offer_accepted'
 
 
 

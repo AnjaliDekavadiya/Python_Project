@@ -31,6 +31,11 @@
         <field name="arch" type="xml">
             <form string="Test">
                 <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="%(property_offer_action)d" type="action" icon="fa-money" class="oe_stat_button">
+                            <field name="offer_count" widget="statinfo" string="Offers"/>
+                        </button>
+                    </div>
                     <h1><b><field name="name" placeholder="Category"/></b></h1>
                     <hr size="10000px" noshade="1"/>
                     <group>
@@ -84,6 +89,18 @@
                 </sheet>
             </form>
         </field>
+    </record>
+
+    <record id="property_offer_action" model="ir.actions.act_window">
+        <field name="name">Property Offers</field>
+        <field name="res_model">property.offer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('property_type_id', '=', active_id)]</field>
+        <!--<field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first property tag!
+            </p>
+        </field>-->
     </record>
 
     <record id="property_offer_tree" model="ir.ui.view">
