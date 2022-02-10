@@ -98,6 +98,7 @@
                 <button name="action_accept" type="object" icon="fa-check" attrs="{'invisible': [('status', 'in', ('accepted','refused'))]}"/>
                 <button name="action_reject" type="object" icon="fa-close" attrs="{'invisible': [('status', 'in',('accepted','refused'))]}"/>
                 <field name="status" invisible="1"/>
+
             </tree>
         </field>
     </record>

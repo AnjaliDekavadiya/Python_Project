@@ -47,6 +47,23 @@ class TestModel(models.Model):
 
     ]
 
+    def action_sold(self):
+        self.state = 'sold'
+
+    def action_new(self):
+        self.state='new'
+
+    def action_received(self):
+        self.state='offer_received'
+
+    def action_accepted(self):
+        self.state='offer_accepted'
+
+    def action_cancel(self):
+        self.state = 'cancelled'
+
+
+
     @api.depends('living_area', 'garden_area')
     def _compute_total(self):
         self.total_area = self.living_area + self.garden_area
@@ -66,21 +83,6 @@ class TestModel(models.Model):
         else:
             self.garden_area = 0
             self.garden_orientation = ''
-
-    def action_sold(self):
-        self.state = 'sold'
-
-    def action_new(self):
-        self.state='new'
-
-    def action_received(self):
-        self.state='offer_received'
-
-    def action_accepted(self):
-        self.state='offer_accepted'
-
-    def action_cancel(self):
-        self.state = 'cancelled'
 
     @api.constrains('name')
     def check_name(self):
@@ -103,6 +105,30 @@ class TestModel(models.Model):
                 if rec.selling_price < value:
                     rec.selling_price = 0
                     raise ValidationError("The selling price should not be less than 90% of expected price.")
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('description'):
+            vals['description'] = 'New Property'
+        res = super(TestModel, self).create(vals)
+        return res
+
+    def unlink(self):
+        if self.state not in ('new', 'cancelled'):
+            raise ValidationError("You Can't delete property if it is not in New or Cancelled State.")
+        for rec in self.offer_ids:
+            rec.unlink()
+        return super(TestModel, self).unlink()
+
+    def check_offer(self, price):
+        # current = self.env['test.model'].browse(self._context.get('active_id')).offer_ids
+        if price <= self.best_price:
+            raise ValidationError("New offer price must be greater than present offers.")
+        elif self.state == 'new':
+            self.state = 'offer_received'
+        return True
+
+
 
 
 

@@ -9,6 +9,8 @@ class PropertyType(models.Model):
     property_ids = fields.One2many('test.model','property_type_id',string='Property')
     _order = "name"
     sequence = fields.Integer('Sequence', default=1)
+    #offer_ids=fields.one2many()
+    #offer_count=fields.Integer(compute='_number_of_offers')
 
     @api.constrains('name')
     def check_name(self):

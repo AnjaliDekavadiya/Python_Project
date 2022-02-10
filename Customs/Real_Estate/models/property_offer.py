@@ -1,8 +1,8 @@
 from odoo import fields, models,api
-from odoo.exceptions import ValidationError
 
 
-class TestModel(models.Model):
+
+class PropertyOffer(models.Model):
     _name = "property.offer"
     _description = "Property Offer"
 
@@ -14,6 +14,7 @@ class TestModel(models.Model):
     property_id = fields.Many2one('test.model', required=True)
     create_date = fields.Datetime(default=fields.Datetime.now())
     _order = "price desc"
+    #property_type_id=fields.Many2one("property_id.property_type_id", store='True')
 
     _sql_constraints=[('check_price','CHECK(price > 0)','Offer price must be positive.')]
 
@@ -37,6 +38,12 @@ class TestModel(models.Model):
     def _inverse_date(self):
         for rec in self:
             rec.validity = (rec.date_deadline - rec.create_date.date()).days
+
+    @api.model
+    def create(self, vals):
+        if vals.get('price'):
+            self.env['test.model'].browse(vals['property_id']).check_offer(vals.get('price'))
+        return super(PropertyOffer, self).create(vals)
 
 
 

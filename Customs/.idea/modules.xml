@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Custom_addons.iml" filepath="$PROJECT_DIR$/.idea/Custom_addons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Customs.iml" filepath="$PROJECT_DIR$/.idea/Customs.iml" />
     </modules>
   </component>
 </project>
