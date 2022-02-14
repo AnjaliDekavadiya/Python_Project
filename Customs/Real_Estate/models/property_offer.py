@@ -4,6 +4,7 @@ from odoo import fields, models,api
 
 class PropertyOffer(models.Model):
     _name = "property.offer"
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Property Offer"
 
     price = fields.Float(string="Price", tracking=True)

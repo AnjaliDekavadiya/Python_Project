@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--<record id="report_properties" model="ir.actions.report">
+        <field name="name">Properties</field>
+        <field name="model">test.model</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">Real_Estate.report_properties</field>
+        <field name="report_file">Real_Estate.report_properties</field>
+        <field name="binding_model_id" ref="model_test_model"/>
+        <field name="binding_type">report</field>
+    </record>-->
+
+
+    <report
+    id="report_properties"
+    model="test.model"
+    string="Property     Detail"
+    report_type="qweb-pdf"
+    name="Real_Estate.report_properties"
+    file="Real_Estate.report_properties"
+    attachment_use="True"
+    />
+
+    <report
+    id="report_properties_xlsx"
+    model="test.model"
+    string="Property Detail(Excel)"
+    report_type="xlsx"
+    name="real_estate.report_properties_xls"
+    file="real_estate.report_properties_xls"
+    attachment_use="True"
+    />
+</odoo>

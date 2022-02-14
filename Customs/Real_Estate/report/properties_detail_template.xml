@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <template id="report_properties">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <h1><span t-field="o.reference"/></h1>
+                                <table class="table table-condensed" style="border: 3px solid black !important;">
+                                    <tr>
+                                        <td width="40%">
+                                            <image t-if="not o.image" t-att-src="'web/static/src/img/placeholder.png'" height="270" width="270" border="1"/>
+                                            <image t-if="o.image" t-att-src="'data: image/png;base64, %s' %to_text(o.image)" height="270" border="1" width="270" align="center"/>
+                                        </td>
+                                        <td width="60%">
+                                            <table>
+                                                <tr>
+                                                    <td colspan="3" class="text-center">
+                                                        <span t-field="o.name"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            Expected Price:
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.expected_price"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            Selling Price:
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.selling_price"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            Best Offer:
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.best_price"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span t-field="o.tag_ids"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <div>
+                                    Seller Name: <span t-field="o.seller_id"/>
+                                </div>
+                                <div>
+                                    Buyer Name: <span t-field="o.buyer_id"/>
+                                </div>
+                                <br/>
+                                <t t-if="o.offer_ids">
+                                    <h4><strong><span>Offer Detalis</span></strong></h4>
+                                    <table class="table table-sm o_main_table">
+                                        <thead>
+                                            <tr>
+                                                <th name="th_price" class="text-left">
+                                                    <span>Price</span>
+                                                </th>
+                                                <th name="th_partner" class="text-left">
+                                                    <span>Partner</span>
+                                                </th>
+                                                <th name="th_validity" class="text-left">
+                                                    <span>Validity(days)</span>
+                                                </th>
+                                                <th name="th_deadline" class="text-left">
+                                                    <span>Deadline</span>
+                                                </th>
+                                                <th name="th_status" class="text-left">
+                                                    <span>Status</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <t t-set="offer_count" t-value="0"/>
+                                        <t t-foreach="o.offer_ids" t-as="line">
+                                            <t t-set="offer_count" t-value="offer_count + 1"/>
+                                            <tr>
+                                                <td>
+                                                    <span t-field="line.price"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="line.partner_id"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="line.validity"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="line.date_deadline"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="line.status"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td colspan="2">
+                                                <strong>Total Offers</strong>
+                                            </td>
+                                            <td>
+                                                <t t-esc="offer_count"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+
+    </template>
+
+</odoo>

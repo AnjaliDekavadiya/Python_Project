@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 
 class TestModel(models.Model):
     _name = "test.model"
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Test Model"
 
     name = fields.Char(required=True)
@@ -37,8 +38,9 @@ class TestModel(models.Model):
     tag_ids = fields.Many2many(comodel_name="property.tag", string="Tags")
     offer_ids = fields.One2many("property.offer", "property_id", string="Offers")
     total_area = fields.Float(compute="_compute_total", string="Total Area (sqm)")
-    best_price = fields.Integer(compute="_compute_price", string="Best Offer")
+    best_price = fields.Float(compute="_compute_price", string="Best Offer")
     _order = "id desc"
+    image=fields.Binary(string="Property Image")
 
 
     _sql_constraints = [
@@ -72,10 +74,11 @@ class TestModel(models.Model):
 
     @api.depends('offer_ids.partner_id')
     def _compute_price(self):
-        if self.offer_ids.partner_id:
-            self.best_price = max(i.price for i in self.offer_ids)
-        else:
-            self.best_price = 0
+        for record in self:
+            if record.offer_ids.partner_id:
+                record.best_price = max(i.price for i in record.offer_ids)
+            else:
+                record.best_price = 0
 
     @api.onchange("garden")
     def _onchange_garden(self):
@@ -126,7 +129,9 @@ class TestModel(models.Model):
 
     def check_offer(self, price):
         # current = self.env['test.model'].browse(self._context.get('active_id')).offer_ids
-        if price <= self.best_price:
+        if price < 0:
+            raise ValidationError("Offer price must be positive.")
+        elif price <= self.best_price:
             raise ValidationError("New offer price must be greater than present offers.")
         elif self.state == 'new':
             self.state = 'offer_received'
