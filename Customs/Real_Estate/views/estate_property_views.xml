@@ -240,6 +240,12 @@
               parent = "test_first_level_menu"
               sequence = "10"/>
 
+	<menuitem id = "menu_create_offer"
+              name = "Create Offer"
+              action = "action_create_offer"
+              parent = "test_first_level_menu"
+              sequence = "20"/>
+
 
 
 </odoo>

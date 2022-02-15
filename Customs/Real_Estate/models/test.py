@@ -89,6 +89,12 @@ class TestModel(models.Model):
             self.garden_area = 0
             self.garden_orientation = ''
 
+    '''@api.onchange("offer_ids")
+    def _onchange_offer(self):
+        for rec in self.offer_ids:
+            if rec.offer_ids==None:
+                rec.state='new'''''
+
     @api.constrains('name')
     def check_name(self):
         for record in self:

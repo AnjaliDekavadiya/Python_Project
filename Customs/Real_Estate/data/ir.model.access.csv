@@ -3,3 +3,4 @@ access_test_model,access_test_model,model_test_model,base.group_user,1,1,1,1
 access_property_type,access_property_type,model_property_type,base.group_user,1,1,1,1
 access_property_tag,access_property_tag,model_property_tag,base.group_user,1,1,1,1
 access_property_offer,access_property_offer,model_property_offer,base.group_user,1,1,1,1
+access_create_offer_wizard,access_create_offer_wizard,model_create_offer_wizard,base.group_user,1,1,1,1

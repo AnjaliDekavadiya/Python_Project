@@ -50,5 +50,10 @@ class PropertyOffer(models.Model):
             self.property_id.buyer_id = self.partner_id
             self.property_id.state = 'offer_accepted'
 
+    '''def unlink(self):
+        if len(self.property_id.offer_ids):
+            self.property_id.state='new'
+        return super(PropertyOffer, self).unlink()'''
+
 
 
