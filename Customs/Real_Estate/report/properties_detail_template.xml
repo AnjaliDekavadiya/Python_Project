@@ -67,7 +67,7 @@
                                     Seller Name: <span t-field="o.seller_id"/>
                                 </div>
                                 <div>
-                                    Buyer Name: <span t-field="o.buyer_id"/>
+                                    Buyer Name: <span t-field="o.buyer_id" t-if="o.buyer_id=="/>
                                 </div>
                                 <br/>
                                 <t t-if="o.offer_ids">
